@@ -54,13 +54,6 @@ namespace RetroBar
             AppointmentList.SetBinding(ItemsControl.ItemsSourceProperty, bind);
         }
 
-        private void ScrollViewer_PreviewMouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
-        {
-            var viewer = (ScrollViewer)sender;
-            viewer.ScrollToVerticalOffset(viewer.VerticalOffset - e.Delta);
-            e.Handled = true;
-        }
-
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
             await GetCalendarItems();
@@ -75,5 +68,22 @@ namespace RetroBar
                 await GetCalendarItems(date);
             }
         }
+        private void AppointmentList_PreviewMouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
+        {
+            PerformScroll(AppointmentScrollViewer, e);
+        }
+
+        private void ScrollViewer_PreviewMouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
+        {
+            var viewer = (ScrollViewer)sender;
+            PerformScroll(viewer, e);
+        }
+
+        private void PerformScroll(ScrollViewer viewer, System.Windows.Input.MouseWheelEventArgs e)
+        {
+            viewer.ScrollToVerticalOffset(viewer.VerticalOffset - e.Delta);
+            e.Handled = true;
+        }
+
     }
 }

@@ -11,8 +11,8 @@
         <DataTemplate x:Key="AppointmentTemplate">
             <StackPanel Orientation="Vertical">
                 <StackPanel.ToolTip>
-                    <ToolTip Background="{DynamicResource ToolTipBackground}" Foreground="{DynamicResource ToolTipForeGround}">
-                        <Label Content="{Binding Subject}" Foreground="{DynamicResource ToolTipForeGround}"/>
+                    <ToolTip Background="{DynamicResource ToolTipBackground}" Foreground="{DynamicResource ToolTipForeground}">
+                        <Label Content="{Binding Subject}" Foreground="{DynamicResource ToolTipForeground}"/>
                     </ToolTip>
                 </StackPanel.ToolTip>
                 <StackPanel Orientation="Horizontal">
@@ -20,16 +20,16 @@
                     <Label Content="-"/>
                     <Label Content="{Binding Duration}"/>
                 </StackPanel>
-                <TextBlock TextWrapping="WrapWithOverflow" Text="{Binding Subject}"/>
+                <TextBlock TextWrapping="Wrap" Text="{Binding Subject}"/>
             </StackPanel>
         </DataTemplate>
     </Window.Resources>
 
-    <StackPanel Orientation="Vertical">
+    <StackPanel Orientation="Vertical" PreviewMouseWheel="AppointmentList_PreviewMouseWheel">
         <Viewbox Height="170" Stretch="Uniform">
             <Calendar x:Name="AppointmentCalendar" SelectedDatesChanged="AppointmentCalendar_SelectedDatesChanged" />
         </Viewbox>
-        <ScrollViewer PreviewMouseWheel="ScrollViewer_PreviewMouseWheel" Height="230">
+        <ScrollViewer x:Name="AppointmentScrollViewer" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel" Height="230" HorizontalScrollBarVisibility="Hidden">
             <ListBox x:Name="AppointmentList" ItemTemplate="{StaticResource AppointmentTemplate}" av:ItemsSource="{av:SampleData ItemCount=5}"/>
         </ScrollViewer>
     </StackPanel>
