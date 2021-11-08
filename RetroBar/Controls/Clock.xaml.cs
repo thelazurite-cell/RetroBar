@@ -7,6 +7,7 @@ using System.Windows.Threading;
 using ManagedShell.Common.Helpers;
 using RetroBar.Utilities;
 using RetroBar;
+using ManagedShell.AppBar;
 
 namespace RetroBar.Controls
 {
@@ -135,8 +136,27 @@ namespace RetroBar.Controls
             {
                 var point = PointToScreen(Mouse.GetPosition(this));
                 var window = new CalendarWindow();
-                window.Left = point.X - window.Width;
-                window.Top = point.Y - window.Height;
+
+                switch (Settings.Instance.Edge)
+                {
+                    case (int)AppBarEdge.Left:
+                        window.Left = (TaskBarDetails.Screen.Bounds.Right / TaskBarDetails.DpiScale) - TaskBarDetails.BarSize - 10;
+                        window.Top = point.Y - window.Height;
+                        break;
+                    case (int)AppBarEdge.Right:
+                        window.Left = (TaskBarDetails.Screen.Bounds.Left / TaskBarDetails.DpiScale) + TaskBarDetails.BarSize + 10;
+                        window.Top = point.Y - window.Height;
+                        break;
+                    case (int)AppBarEdge.Top:
+                        window.Left = point.X - window.Width;
+                        window.Top = (TaskBarDetails.Screen.Bounds.Top / TaskBarDetails.DpiScale) + TaskBarDetails.DpiScale + 10;
+                        break;
+                    default:
+                        window.Left = point.X - window.Width;
+                        window.Top = (TaskBarDetails.Screen.Bounds.Bottom / TaskBarDetails.DpiScale) - TaskBarDetails.BarSize - window.Height -10;
+                        break;
+                }
+
                 window.Show();
             }
         }

@@ -16,6 +16,11 @@ using System.Diagnostics;
 
 namespace RetroBar
 {
+    public static class TaskBarDetails {
+        public static AppBarScreen Screen { get; set; }
+        public static double DpiScale { get; set; } 
+        public static double BarSize { get; set; }
+    }
     /// <summary>
     /// Interaction logic for Taskbar.xaml
     /// </summary>
@@ -54,6 +59,10 @@ namespace RetroBar
             {
                 StartButton.Visibility = Visibility.Collapsed;
             }
+
+            TaskBarDetails.Screen = Screen;
+            TaskBarDetails.BarSize = Orientation == Orientation.Horizontal ? DesiredHeight : DesiredWidth;
+            TaskBarDetails.DpiScale = DpiScale;
         }
 
         protected override void OnSourceInitialized(object sender, EventArgs e)
@@ -157,34 +166,48 @@ namespace RetroBar
             // primarily for win7/8, they will set up the appbar correctly but then put it in the wrong place
             if (Orientation == Orientation.Vertical)
             {
-                double desiredLeft = 0;
-
-                if (AppBarEdge == AppBarEdge.Left)
-                {
-                    desiredLeft = Screen.Bounds.Left / DpiScale;
-                }
-                else if (AppBarEdge == AppBarEdge.Right)
-                {
-                    desiredLeft = Screen.Bounds.Right / DpiScale - Width;
-                }
-
-                if (Left != desiredLeft) Left = desiredLeft;
+                DesiredLeft();
             }
             else
             {
-                double desiredTop = 0;
-
-                if (AppBarEdge == AppBarEdge.Top)
-                {
-                    desiredTop = Screen.Bounds.Top / DpiScale;
-                }
-                else if (AppBarEdge == AppBarEdge.Bottom)
-                {
-                    desiredTop = Screen.Bounds.Bottom / DpiScale - Height;
-                }
-
-                if (Top != desiredTop) Top = desiredTop;
+                DesiredTop();
             }
+        }
+
+        public double DesiredTop()
+        {
+            double desiredTop = 0;
+
+            if (AppBarEdge == AppBarEdge.Top)
+            {
+                desiredTop = Screen.Bounds.Top / DpiScale;
+            }
+            else if (AppBarEdge == AppBarEdge.Bottom)
+            {
+                desiredTop = Screen.Bounds.Bottom / DpiScale - Height;
+            }
+
+            if (Top != desiredTop) Top = desiredTop;
+
+            return desiredTop;
+        }
+
+        public double DesiredLeft()
+        {
+            double desiredLeft = 0;
+
+            if (AppBarEdge == AppBarEdge.Left)
+            {
+                desiredLeft = Screen.Bounds.Left / DpiScale;
+            }
+            else if (AppBarEdge == AppBarEdge.Right)
+            {
+                desiredLeft = Screen.Bounds.Right / DpiScale - Width;
+            }
+
+            if (Left != desiredLeft) Left = desiredLeft;
+
+            return desiredLeft;
         }
 
         private void TaskManagerMenuItem_OnClick(object sender, RoutedEventArgs e)
